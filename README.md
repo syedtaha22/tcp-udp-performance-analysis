@@ -64,10 +64,24 @@ Python provides the `socket` library to implement **TCP and UDP communication**.
 
 ## **Project Structure**  
 
+- **`tcp_server.py` and `udp_server.py`** → Implement the server-side logic for TCP and UDP communication. They can be imported as modules in other scripts.
+   ```python
+   from tcp_server import TCPServer
+   from udp_server import UDPServer
+   ```
+
+
+- **`tcp_client.py` and `udp_client.py`** → Implement the client-side logic for TCP and UDP communication. They can be imported as modules in other scripts.
+   ```python
+   from tcp_client import TCPClient
+   from udp_client import UDPClient
+   ```
+
+
 - **`tcp/` and `udp/`** → Contain **multi-client tests** for TCP and UDP. Each client sends messages independently, allowing performance testing with multiple concurrent connections.  
-- **`v2/tcp/` and `v2/udp/`** → Contain the **newer tests**, where a **single client sends an increasing number of messages** instead of multiple clients. This version provides a better **per-message performance comparison** between TCP and UDP.  
-- **`old/`** → Stores the **original implementation** of the tests before improvements.  
+- **`v2/tcp/` and `v2/udp/`** → Contain the **newer tests**, where a **single client sends an increasing number of messages** instead of multiple clients. This version provides a better **per-message performance comparison** between TCP and UDP.   
 - **`plot.ipynb`** → Analyzes and visualizes **TCP vs. UDP performance** based on collected data.  
+- **`Message.py`** → Provides a function that return a dummy message for testing purposes. In the one I've set, the Client is upset. :)
 
 ---
 
@@ -81,23 +95,22 @@ This version tests how well TCP and UDP handle **multiple clients**.
 #### **Running the TCP Multi-Client Test**  
 1. Start the TCP server:  
    ```bash
-   python tcp/tcp_server.py
+   python tcp/server.py
    ```  
 2. Run the TCP client (spawns multiple clients):  
    ```bash
-   python tcp/tcp_client.py
+   python tcp/client.py
    ```  
 
 #### **Running the UDP Multi-Client Test**  
 1. Start the UDP server:  
    ```bash
-   python udp/udp_server.py
+   python udp/server.py
    ```  
 2. Run the UDP client (spawns multiple clients):  
    ```bash
-   python udp/udp_client.py
+   python udp/client.py
    ```  
-
 ---
 
 ### **Single-Client, Increasing Messages Tests (`v2/tcp/` and `v2/udp/`)**  
@@ -137,11 +150,26 @@ This notebook reads **TCP and UDP performance logs**, processes the data, and **
 
 ## **Key Features**  
 
+### **Server Implementations**
+- **TCP Server** → Represents a TCP server that accepts client connections and sends/receives messages and acknowledgments.
+- **UDP Server** → Represents a UDP server that listens for incoming messages and sends responses.
+
+### **Client Implementations**
+- **TCP Client** → Represents a TCP client that connects to a server, sends messages, and receives acknowledgments. It measures latency and throughput and logs the results to a file.
+- **UDP Client** → Represents a UDP client that sends messages to a server and receives responses. It measures latency, throughput, and packet loss and logs the results to a file.
+
+
+
+Bot the server and client implementations log their conversations to a file. The logs can the be used to debug and analyze the flow of messages between the server and client.
+
+They are designed to be **modular and reusable** for different test scenarios.
+
+
 ### **Multi-Client Tests (`tcp/` and `udp/`)**  
-- **TCP Server** → Handles multiple client connections concurrently.  
-- **UDP Server** → Simulates packet loss by randomly dropping packets.  
-- **TCP Clients** → Measure round-trip time and throughput.  
-- **UDP Clients** → Track message delivery success and latency.  
+- **Tests network behavior with multiple clients.**
+- **Records average latency, throughput, and packet loss.**
+- **Provides a per-client performance comparison between TCP and UDP.**
+
 
 ### **Single-Client Increasing Messages Tests (`v2/tcp/` and `v2/udp/`)**  
 - **Tests network behavior as message count increases.**  
